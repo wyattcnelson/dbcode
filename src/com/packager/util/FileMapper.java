@@ -10,8 +10,11 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Collections;
 
 public class FileMapper {
+
+	private static String GROUP_DELIMITER = "@";
 
 	public static void main(String[] args) {
 		
@@ -113,11 +116,78 @@ public class FileMapper {
 		Set<String> spokenFor = new HashSet<String>();
 
 		// Iterate entries in redundantSequenceMap
-		for(Map.Entry<String, List<String>> entry : redundantSequenceMap.entrySet()) {
-			
+		for(String sequence : redundantSequenceMap.keySet()) {
+		
+			if(spokenFor.contains(sequence)) {
+				continue;
+			}
+
+			String groupKey = groupName + GROUP_DELIMITER + sequence;
+			output.put(groupKey, new ArrayList<String>());
+
+			// Test remaining entries against this key
+			for(Map.Entry<String, List<String>> entry : redundantSequenceMap.entrySet()) {
+				if(passDifferenceTest(diffs, sequence, entry.getKey())){
+					Collections.sort(entry.getValue());
+					String firstName = entry.getValue().get(0);
+					System.out.println("firstName = " + firstName);
+					spokenFor.add(entry.getKey());
+				}
+			}
+
 			count++;
 			groupName = groupName.substring(0,groupName.length() - ("" + count).length()) + count;
 		}
 		return output;
 	}
+
+	/**
+	 *
+	 *
+	 *
+	 * @author wcnelson
+	 * @param maxDiffs	number of positions that differ between any two members of a group
+	 * @param string1
+	 * @param string2
+	 *
+	 */
+	private static boolean passDifferenceTest(int maxDiffs, String string1, String string2) {
+		
+		// Assume the strings have different lengths
+		String longString = "";
+		String shortString = "";
+
+		if(string1.length() < string2.length()) {
+			longString = string2;
+			shortString = string1;
+		}else{
+			longString = string1;
+			shortString = string2;
+		}
+
+		// initialize diffCount to length difference
+		int diffCount = longString.length() - shortString.length();
+		for(int i = 0; i < shortString.length(); i++) {
+			if(longString.charAt(i) != shortString.charAt(i)) {
+				diffCount++;
+			}
+			if(diffCount > maxDiffs){
+				return false;
+			}
+		}
+		return true;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
