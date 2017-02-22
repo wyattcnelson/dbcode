@@ -15,6 +15,7 @@ import java.util.Collections;
 public class FileMapper {
 
 	private static String GROUP_DELIMITER = "@";
+	private static String MEMBER_DELIMITER = "?";
 
 	public static void main(String[] args) {
 		
@@ -130,7 +131,7 @@ public class FileMapper {
 				if(passDifferenceTest(diffs, sequence, entry.getKey())){
 					Collections.sort(entry.getValue());
 					String firstName = entry.getValue().get(0);
-					System.out.println("firstName = " + firstName);
+					output.get(groupKey).add(firstName + MEMBER_DELIMITER + entry.getKey());
 					spokenFor.add(entry.getKey());
 				}
 			}
@@ -138,6 +139,12 @@ public class FileMapper {
 			count++;
 			groupName = groupName.substring(0,groupName.length() - ("" + count).length()) + count;
 		}
+
+		// print some info
+		for(Map.Entry<String, List<String>> entry : output.entrySet()) {
+			System.out.println("Group: " + entry.getKey() + "   has " + entry.getValue().size() + " members");
+		}
+
 		return output;
 	}
 
