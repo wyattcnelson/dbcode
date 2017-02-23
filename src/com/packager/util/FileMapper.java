@@ -14,8 +14,8 @@ import java.util.Collections;
 
 public class FileMapper {
 
-	private static String GROUP_DELIMITER = "@";
-	private static String MEMBER_DELIMITER = "?";
+	public static final String GROUP_DELIMITER = "@";
+	public static final String MEMBER_DELIMITER = "?";
 
 	public static void main(String[] args) {
 		

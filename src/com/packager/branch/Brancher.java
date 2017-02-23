@@ -1,9 +1,11 @@
 package com.packager.branch;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+
 import com.packager.util.FileMapper;
 
 public class Brancher {
@@ -25,7 +27,7 @@ public class Brancher {
 
 		for(Map.Entry<String, List<String>> entry : groupMap.entrySet()) {
 			
-			String[] groupKey = entry.getKey.split(FileMapper.getGroupDelimiter());
+			String[] groupKey = entry.getKey().split(FileMapper.GROUP_DELIMITER);
 			String groupName = groupKey[0];
 			String groupSequence = groupKey[1];
 
@@ -35,7 +37,7 @@ public class Brancher {
 			
 			// Accumulate branch points
 			for(String item : entry.getValue()) {
-				String[] member = item.split(FileMapper.getMemberDelimiter());
+				String[] member = item.split(FileMapper.MEMBER_DELIMITER);
 				String memberFirstName = member[0];
 				String memberSequence = member[1];
 
@@ -58,7 +60,7 @@ public class Brancher {
 			}
 
 			// Assign branch1Key
-			String branch1Key = ID + "1" + groupName + FileMapper.getGroupDelimiter() + groupSequence;
+			String branch1Key = ID + "1" + groupName + FileMapper.GROUP_DELIMITER + groupSequence;
 
 			// No branches
 			if(max == 0) {
@@ -71,10 +73,10 @@ public class Brancher {
 			String branch2FirstName = "";
 			String branch2GroupSequence = "";
 			for(String item : entry.getValue()) {
-				String[] member = item.split(FileMapper.getMemberDelimiter());
+				String[] member = item.split(FileMapper.MEMBER_DELIMITER);
 				String memberFirstName = member[0];
 				String memberSequence = member[1];
-				if(index >= memberSequence.length) {
+				if(index >= memberSequence.length()) {
 					continue;
 				}
 				if(groupSequence.charAt(index) != memberSequence.charAt(index)){
@@ -86,18 +88,18 @@ public class Brancher {
 			}
 
 			// Assign branch2Key
-			String branch2Key = ID + "2" + groupName + FileMapper.getGroupDelimiter() + branch2GroupSequence;
+			String branch2Key = ID + "2" + groupName + FileMapper.GROUP_DELIMITER + branch2GroupSequence;
 	
 			// Divide entries by branchPoint
 			output.put(branch1Key, new ArrayList<String>());
 			output.put(branch2Key, new ArrayList<String>());
 			for(String item : entry.getValue()) {
-				String[] member = item.split(FileMapper.getMemberDelimiter());
+				String[] member = item.split(FileMapper.MEMBER_DELIMITER);
 				String memberFirstName = member[0];
 				String memberSequence = member[1];
 				// To stay in branch1, the member must be the same length as the group sequence
 				// and match the char at the branch point
-				if(groupSequence.length() == memberSequence() && groupSequence.charAt(index) == memberSequence.charAt(index)){
+				if(groupSequence.length() == memberSequence.length() && groupSequence.charAt(index) == memberSequence.charAt(index)){
 					output.get(branch1Key).add(item);
 				}else{
 					output.get(branch2Key).add(item);
