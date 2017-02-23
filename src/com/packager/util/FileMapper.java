@@ -12,15 +12,18 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Collections;
 
+import com.packager.branch.Brancher;
+
 public class FileMapper {
 
 	public static final String GROUP_DELIMITER = "@";
-	public static final String MEMBER_DELIMITER = "?";
+	public static final String MEMBER_DELIMITER = "x";
 
 	public static void main(String[] args) {
 		
 		Map<String, List<String>> redundantSequenceMap = mapRedundantSequences(args[0]);
 		Map<String, List<String>> groupMap = mapGroups(redundantSequenceMap, 3);	
+		Map<String, List<String>> branchMap = Brancher.branchGroups(groupMap, "A");	
 
 	}
 
@@ -83,8 +86,10 @@ public class FileMapper {
 
 			}
 
+			// Print some info
 			System.out.println("File has " + count + " sequences");
 			System.out.println("Found " + output.size() + " unique sequences");
+			
 			return output;
 		} catch (IOException e) {
 			System.out.println("IO Exception Error");
@@ -110,7 +115,7 @@ public class FileMapper {
 		Map<String, List<String>> output = new HashMap<String, List<String>>();
 		
 		// Initialize groupName
-		String groupName = "G0000";
+		String groupName = "G000000";
 		int count = 0;
 
 		// Use hashset to keep track of allocated sequences
@@ -128,6 +133,9 @@ public class FileMapper {
 
 			// Test remaining entries against this key
 			for(Map.Entry<String, List<String>> entry : redundantSequenceMap.entrySet()) {
+				if(spokenFor.contains(entry.getKey())) {
+					continue;
+				}
 				if(passDifferenceTest(diffs, sequence, entry.getKey())){
 					Collections.sort(entry.getValue());
 					String firstName = entry.getValue().get(0);
@@ -141,9 +149,8 @@ public class FileMapper {
 		}
 
 		// print some info
-		for(Map.Entry<String, List<String>> entry : output.entrySet()) {
-			System.out.println("Group: " + entry.getKey() + "   has " + entry.getValue().size() + " members");
-		}
+		System.out.println("After grouping...");
+		System.out.println("# of groups: " + output.size());
 
 		return output;
 	}
