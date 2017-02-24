@@ -1,4 +1,4 @@
-package com.packager.branch;
+package com.packager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-import com.packager.util.FileMapper;
+import com.packager.FileMapper;
 
 public class Brancher {
 
@@ -96,7 +96,7 @@ public class Brancher {
 	 * @param list
 	 *
 	 */
-	private static int findBranchPoint(String groupSequence, List<String> list) {
+	public static int findBranchPoint(String groupSequence, List<String> list) {
 		
 		// Declare and intialize to 0 an array to store counts
 		int[] branchPoints = new int[groupSequence.length()];
@@ -129,7 +129,7 @@ public class Brancher {
 	 * @param array
 	 *
 	 */
-	private static int indexOfMax(int[] array) {
+	public static int indexOfMax(int[] array) {
 		int max = 0;
 		int index = 0;
 		for(int i = 0; i < array.length; i++) {
