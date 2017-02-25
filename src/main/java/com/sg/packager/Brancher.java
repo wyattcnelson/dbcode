@@ -1,4 +1,4 @@
-package com.packager;
+package com.sg.packager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-import com.packager.FileMapper;
+import com.sg.packager.FileMapper;
 
 public class Brancher {
 

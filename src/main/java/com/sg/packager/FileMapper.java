@@ -1,4 +1,4 @@
-package com.packager;
+package com.sg.packager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Collections;
 
-import com.packager.Brancher;
+import com.sg.packager.Brancher;
 
 public class FileMapper {
 

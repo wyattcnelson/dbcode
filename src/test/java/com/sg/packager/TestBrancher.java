@@ -1,9 +1,9 @@
-package com.packager;
+package com.sg.packager;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-import com.packager.Brancher;
+import com.sg.packager.Brancher;
 
 public class TestBrancher {
 
