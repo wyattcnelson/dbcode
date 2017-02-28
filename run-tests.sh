@@ -2,23 +2,29 @@
 
 echo "Running tests..."
 
-MAIN_SRC=src/main/java
-TESTS_SRC=src/tests/java
-TARGET=target
+MAIN_SRC="src/main/java"
+TESTS_SRC="src/test/java"
 
-JUNIT=src/tests/resources/junit-4.12.jar
-HAMCREST=src/tests/resources/hamcrest-core-1.3.jar
+MAIN_CLASS="target/main"
+TEST_CLASS="target/test"
 
-TEST=org.junit.runner.JUnitCore
+JUNIT="src/test/resources/junit-4.12.jar"
+HAMCREST="src/test/resources/hamcrest-core-1.3.jar"
+
+TEST="org.junit.runner.JUnitCore"
 
 # Compile source files
 
+echo "Compiling TestBrancher..."
+
 # -- TestBrancher
-javac -d $TARGET -cp $JUNIT -sourcepath $MAIN_SRC "$TESTS_SRC/com/packager/TestBrancher.java"
+javac -d $TEST_CLASS -cp $JUNIT -sourcepath $MAIN_SRC "$TESTS_SRC/com/sg/packager/TestBrancher.java"
 
 
 
 # Run 
 
+echo "Running TestBrancher..."
+
 # -- TestBrancher
-java -cp $JUNIT:$HAMCREST:$TARGET $TEST com.packager.TestBrancher
+java -cp $JUNIT:$HAMCREST:$MAIN_CLASS:$TEST_CLASS $TEST com.sg.packager.TestBrancher

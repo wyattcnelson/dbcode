@@ -17,5 +17,4 @@ public class TestBrancher {
 		int[] arr = new int[]{0,0,5,3,42,234,34,34,2,34,2,4,32,4,323,6,76,78,23,46,4354,2344,243,3,23,4,234,44,0,0};
 		assertEquals(20, Brancher.indexOfMax(arr));
 	}
-
 }
