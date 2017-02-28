@@ -23,8 +23,12 @@ public class FileMapper {
 		
 		Map<String, List<String>> redundantSequenceMap = mapRedundantSequences(args[0]);
 		Map<String, List<String>> groupMap = mapGroups(redundantSequenceMap, 3);	
-		Map<String, List<String>> branchMap = Brancher.branchGroups(groupMap, "A");	
+		
+		String[] branches = {"C","B","A"};		
 
+		for(String branch : branches) {
+			groupMap = Brancher.branchGroups(groupMap, branch);
+		}	
 	}
 
 	/**

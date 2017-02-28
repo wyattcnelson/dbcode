@@ -21,7 +21,7 @@ public class Brancher {
 	public static Map<String, List<String>> branchGroups(Map<String, List<String>> groupMap, String ID) {
 		
 		Map<String, List<String>> output = new HashMap<String, List<String>>();
-		
+
 		for(Map.Entry<String, List<String>> entry : groupMap.entrySet()) {
 			
 			String[] groupKey = entry.getKey().split(FileMapper.GROUP_DELIMITER);
@@ -81,7 +81,7 @@ public class Brancher {
 		}
 
 		// Print some info
-		System.out.println("After branching...");
+		System.out.println("After branching..." + ID);
 		System.out.println("# of groups: " + output.size());
 
 		return output;
