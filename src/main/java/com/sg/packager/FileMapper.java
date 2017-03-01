@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Collections;
 
 import com.sg.packager.Brancher;
+import com.sg.packager.PackChild;
 
 public class FileMapper {
 
@@ -24,10 +25,53 @@ public class FileMapper {
 		Map<String, List<String>> redundantSequenceMap = mapRedundantSequences(args[0]);
 		Map<String, List<String>> groupMap = mapGroups(redundantSequenceMap, 3);	
 		
+		String target = args[0].replaceAll(".fa", "");
+
 		String[] branches = {"C","B","A"};		
 
 		for(String branch : branches) {
 			groupMap = Brancher.branchGroups(groupMap, branch);
+		}	
+
+		Map<String, List<PackChild>> rulesetMap = packChildren(target, groupMap,redundantSequenceMap);
+
+	}
+
+	/**
+	 *
+	 * Provides a map containing a key for every target  
+	 * sequence in the sequence.fa file
+	 * <p>
+	 * The value of each key is a list of PackChild instances that  
+	 * can be written to an xml file
+	 *
+	 * @author wcnelson
+	 * @param target	String target
+	 * @param groupMap	Branched groupMap
+	 * @param redundantSequenceMap Contains ambiguious names from source fa
+	 *
+	 */
+	private static Map<String, List<PackChild>> packChildren(String target, Map<String, List<String>> groupMap, Map<String, List<String>> redundantSequenceMap) {
+
+		Map<String, List<PackChild>> output = new HashMap<String, List<PackChild>>();
+
+		if(!output.containsKey(target)) {
+			output.put(target, new ArrayList<String>());
+		}
+
+		for(String groupKey : groupMap.keySet()) {
+			for(String childKey : groupMap.get(groupKey)) {
+				PackChild packChild = new PackChild();
+				packChild.setTarget(target);
+				packChild.setParentName(groupKey.split(GROUP_DELIMITER)[0]);
+				packChild.setParentSequence(groupKey.split(GROUP_DELIMITER)[1]);
+				packChild.setSequence(childKey.split(MEMBER_DELIMITER)[1]);
+				
+				String firstOldName = childKey.split(MEMBER_DELIMITER)[0];
+				packChild.setOldNames(redundantSequenceMap.get(firstOldName));
+			
+				output.get(target).add(packChild);
+			}
 		}	
 	}
 
