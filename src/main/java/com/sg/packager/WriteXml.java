@@ -101,6 +101,8 @@ public class WriteXml {
 					Element childElement = doc.createElement(CHILD_TAG);
 					childElement.setAttribute("id", pChild.getMismatchString(pChild.getSequence(), pParent.getSequence()));
 					parentElement.appendChild(childElement);
+
+					// TODO add nested elements for fields 1 to n, e.g.,  <field1><field2>...<fieldn></fieldn></field2></field1>
 				}
 			}
 		}	
