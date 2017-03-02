@@ -33,10 +33,9 @@ public class WriteXml {
 	public static final String TARGET_TAG = "target";
 	public static final String PARENT_TAG = "parent";
 	public static final String CHILD_TAG = "child";
+	public static final String FIELD_TAG = "field";
 
-	public static void  main (String args[]) {
-		writeXmlRuleset(null, null);
-	}
+	public static final String NAME_DELIMITER = ":";
 	
 	public static void writeXmlRuleset(Map<String, List<PackParent>> map, File file) {
 	
@@ -100,9 +99,12 @@ public class WriteXml {
 				for(PackChild pChild : pParent.getChildren()) {
 					Element childElement = doc.createElement(CHILD_TAG);
 					childElement.setAttribute("id", pChild.getMismatchString(pChild.getSequence(), pParent.getSequence()));
-					parentElement.appendChild(childElement);
+					childElement.setAttribute("num-old-names", pChild.getOldNames().size() + "");
 
-					// TODO add nested elements for fields 1 to n, e.g.,  <field1><field2>...<fieldn></fieldn></field2></field1>
+					// Add nested elements for fields 1 to n 
+					// e.g.,  <field1><field2>...<fieldn></fieldn></field2></field1>
+					Nester.namesToNestedElements(doc, childElement, pChild.getOldNames(), FIELD_TAG, NAME_DELIMITER);
+					parentElement.appendChild(childElement);
 				}
 			}
 		}	

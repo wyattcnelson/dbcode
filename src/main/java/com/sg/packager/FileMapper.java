@@ -71,11 +71,9 @@ public class FileMapper {
 
 			for(String childKey : entry.getValue()) {
 				PackChild packChild = new PackChild();
-				packChild.setSequence(childKey.split(MEMBER_DELIMITER)[1]);
-				
-				String firstOldName = childKey.split(MEMBER_DELIMITER)[0];
-				packChild.setOldNames(redundantSequenceMap.get(firstOldName));
-			
+				String sequence = childKey.split(MEMBER_DELIMITER)[1];
+				packChild.setSequence(sequence);
+				packChild.setOldNames(redundantSequenceMap.get(sequence));
 				packParent.getChildren().add(packChild);
 			}
 
