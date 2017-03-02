@@ -32,6 +32,7 @@ public class WriteXml {
 	public static final String RULESET_TAG = "ruleset";
 	public static final String TARGET_TAG = "target";
 	public static final String PARENT_TAG = "parent";
+	public static final String CHILD_TAG = "child";
 
 	public static void  main (String args[]) {
 		writeXmlRuleset(null, null);
@@ -95,6 +96,12 @@ public class WriteXml {
 				parentElement.setAttribute("id", pParent.getName());
 				parentElement.setAttribute("sequence", pParent.getSequence());
 				targetElement.appendChild(parentElement);
+
+				for(PackChild pChild : pParent.getChildren()) {
+					Element childElement = doc.createElement(CHILD_TAG);
+					childElement.setAttribute("id", pChild.getMismatchString(pChild.getSequence(), pParent.getSequence()));
+					parentElement.appendChild(childElement);
+				}
 			}
 		}	
 	}

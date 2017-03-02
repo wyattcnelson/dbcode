@@ -9,9 +9,9 @@ public class PackChild {
 	private String sequence;
 	private List<String> oldNames;	
 	
-	private String getMismatchString(String parentSequence) {
+	public static String getMismatchString(String childSequence, String parentSequence) {
 		
-		String[] seqs = equalizeSequenceLengths(this.sequence, parentSequence);
+		String[] seqs = equalizeSequenceLengths(childSequence, parentSequence);
 		
 		char[] arr1 = seqs[0].toCharArray();
 		char[] arr2 = seqs[1].toCharArray();
@@ -30,7 +30,7 @@ public class PackChild {
 		return out;
 	}
 
-	private String[] equalizeSequenceLengths(String seq1, String seq2) {
+	private static String[] equalizeSequenceLengths(String seq1, String seq2) {
 
 		// Remove all 'N' from inputs 
 		seq1.replaceAll("N","");
