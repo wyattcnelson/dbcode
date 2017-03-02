@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.TreeSet;
 import java.util.List;
 
@@ -29,8 +28,6 @@ public class WriteXml {
 
 	public static final String PROJECT_TAG = "project";
 	public static final String RULESET_TAG = "ruleset";
-	public static final String TARGET_TAG = "target";
-	public static final String PARENT_TAG = "parent";
 
 	public static void  main (String args[]) {
 		writeXmlRuleset(null, null);
@@ -55,7 +52,7 @@ public class WriteXml {
 		projectElement.appendChild(rulesetElement);
 
 		// Add map to ruleset element;
-		appendMap(doc, rulesetElement, map);		
+		appendMap(rulesetElement, map);		
 
 		// Save doc to file
 		writeDocToFile(doc, file);
@@ -80,7 +77,7 @@ public class WriteXml {
 		}
 	}
 
-	private static void appendMap(Document doc, Element rulesetElement, Map<String, List<PackChild>> map) {
+	private static void appendMap(Element rulesetElement, Map<String, List<PackChild>> map) {
 
 		for(Map.Entry<String, List<PackChild>> entry : map.entrySet()) {
 
@@ -91,12 +88,12 @@ public class WriteXml {
 
 			Map<String, String> parentMap = new HashMap<String, String>(); // add parent names, sequence
 			for(PackChild pChild : entry.getValue()) {
-				parentMap.put(pChild.getParentName(), pChild.getParentSequence());
+				parentSet.put(pChild.getParentName(), pChild.getParentSequence);
 			}
-			for(Map.Entry<String, String> parent : parentMap.entrySet()) {
+			for(Map.Entry<String, String> parent : parentMap) {
 				Element parentElement = doc.createElement(PARENT_TAG);
-				parentElement.setAttribute("id", parent.getKey());
-				parentElement.setAttribute("sequence", parent.getValue());
+				parentElement.setAttribute("id", parent.getParentName());
+				parentElement.setAttribute("sequence", parent.getParentSequence());
 				targetElement.appendChild(parentElement);
 			}
 		}	

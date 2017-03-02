@@ -1,5 +1,6 @@
 package com.sg.packager;
 
+import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -34,7 +35,8 @@ public class FileMapper {
 		}	
 
 		Map<String, List<PackChild>> rulesetMap = packChildren(target, groupMap,redundantSequenceMap);
-
+		
+		WriteXml.writeXmlRuleset(rulesetMap, new File("test-1.xml"));
 	}
 
 	/**
@@ -56,7 +58,7 @@ public class FileMapper {
 		Map<String, List<PackChild>> output = new HashMap<String, List<PackChild>>();
 
 		if(!output.containsKey(target)) {
-			output.put(target, new ArrayList<String>());
+			output.put(target, new ArrayList<PackChild>());
 		}
 
 		for(String groupKey : groupMap.keySet()) {
@@ -72,7 +74,8 @@ public class FileMapper {
 			
 				output.get(target).add(packChild);
 			}
-		}	
+		}
+		return output;	
 	}
 
 	/**
