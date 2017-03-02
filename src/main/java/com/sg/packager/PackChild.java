@@ -6,15 +6,12 @@ import org.apache.commons.lang3.StringUtils;
 
 public class PackChild {
 
-	private String target;
-	private String parentName;
-	private String parentSequence;
 	private String sequence;
 	private List<String> oldNames;	
 	
-	private String getMismatchString() {
+	private String getMismatchString(String parentSequence) {
 		
-		String[] seqs = equalizeSequenceLengths(this.sequence, this.parentSequence);
+		String[] seqs = equalizeSequenceLengths(this.sequence, parentSequence);
 		
 		char[] arr1 = seqs[0].toCharArray();
 		char[] arr2 = seqs[1].toCharArray();
@@ -51,27 +48,6 @@ public class PackChild {
 		}else{
 			return new String[]{seq1, StringUtils.rightPad(seq2, nPadLength, "N")};
 		}
-	}
-
-	public void setTarget(String target) {
-		this.target = target;
-	}
-	public String getTarget() {
-		return this.target;
-	}	
-
-	public void setParentName(String parentName) {
-		this.parentName = parentName;
-	}
-	public String getParentName() {
-		return this.parentName;
-	}	
-
-	public void setParentSequence(String parentSequence) {
-		this.parentSequence = parentSequence;
-	}
-	public String getParentSequence() {
-		return this.parentSequence;
 	}
 
 	public void setOldNames(List<String> oldNames) {

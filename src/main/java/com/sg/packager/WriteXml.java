@@ -23,6 +23,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.sg.packager.PackParent;
 import com.sg.packager.PackChild;
 
 public class WriteXml {
@@ -36,7 +37,7 @@ public class WriteXml {
 		writeXmlRuleset(null, null);
 	}
 	
-	public static void writeXmlRuleset(Map<String, List<PackChild>> map, File file) {
+	public static void writeXmlRuleset(Map<String, List<PackParent>> map, File file) {
 	
 		// Create a new doc
 		Document doc = createDocument();
@@ -80,32 +81,22 @@ public class WriteXml {
 		}
 	}
 
-	private static void appendMap(Document doc, Element rulesetElement, Map<String, List<PackChild>> map) {
+	private static void appendMap(Document doc, Element rulesetElement, Map<String, List<PackParent>> map) {
 
-		for(Map.Entry<String, List<PackChild>> entry : map.entrySet()) {
+		for(Map.Entry<String, List<PackParent>> entry : map.entrySet()) {
 
 			System.out.println("Mapping: " + entry.getKey());
 			Element targetElement = doc.createElement(TARGET_TAG);
 			targetElement.setAttribute("id", entry.getKey());
 			rulesetElement.appendChild(targetElement);
 
-			Map<String, String> parentMap = new HashMap<String, String>(); // add parent names, sequence
-			for(PackChild pChild : entry.getValue()) {
-				parentMap.put(pChild.getParentName(), pChild.getParentSequence());
-			}
-			for(Map.Entry<String, String> parent : parentMap.entrySet()) {
+			for(PackParent pParent : entry.getValue()) {
 				Element parentElement = doc.createElement(PARENT_TAG);
-				parentElement.setAttribute("id", parent.getKey());
-				parentElement.setAttribute("sequence", parent.getValue());
+				parentElement.setAttribute("id", pParent.getName());
+				parentElement.setAttribute("sequence", pParent.getSequence());
 				targetElement.appendChild(parentElement);
 			}
 		}	
-	}
-
-	private static Element makeElement(Document doc, String tag, String id) {
-		Element element = doc.createElement(tag);
-		element.setAttribute("id", id);
-		return element;
 	}
 
 	private static Document createDocument() {

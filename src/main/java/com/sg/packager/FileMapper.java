@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
@@ -34,7 +35,7 @@ public class FileMapper {
 			groupMap = Brancher.branchGroups(groupMap, branch);
 		}	
 
-		Map<String, List<PackChild>> rulesetMap = packChildren(target, groupMap,redundantSequenceMap);
+		Map<String, List<PackParent>> rulesetMap = pack(target, groupMap,redundantSequenceMap);
 		
 		WriteXml.writeXmlRuleset(rulesetMap, new File("test-1.xml"));
 	}
@@ -44,7 +45,7 @@ public class FileMapper {
 	 * Provides a map containing a key for every target  
 	 * sequence in the sequence.fa file
 	 * <p>
-	 * The value of each key is a list of PackChild instances that  
+	 * The value of each key is a list of PackParent instances that  
 	 * can be written to an xml file
 	 *
 	 * @author wcnelson
@@ -53,27 +54,32 @@ public class FileMapper {
 	 * @param redundantSequenceMap Contains ambiguious names from source fa
 	 *
 	 */
-	private static Map<String, List<PackChild>> packChildren(String target, Map<String, List<String>> groupMap, Map<String, List<String>> redundantSequenceMap) {
+	private static Map<String, List<PackParent>> pack(String target, Map<String, List<String>> groupMap, Map<String, List<String>> redundantSequenceMap) {
 
-		Map<String, List<PackChild>> output = new HashMap<String, List<PackChild>>();
+		Map<String, List<PackParent>> output = new HashMap<String, List<PackParent>>();
 
 		if(!output.containsKey(target)) {
-			output.put(target, new ArrayList<PackChild>());
+			output.put(target, new ArrayList<PackParent>());
 		}
 
-		for(String groupKey : groupMap.keySet()) {
-			for(String childKey : groupMap.get(groupKey)) {
+		for(Map.Entry<String, List<String>> entry : groupMap.entrySet()) {
+
+			String parentName = entry.getKey().split(GROUP_DELIMITER)[0];
+			String parentSequence = entry.getKey().split(GROUP_DELIMITER)[1];
+
+			PackParent packParent = new PackParent(parentName, parentSequence, new LinkedList<PackChild>());
+
+			for(String childKey : entry.getValue()) {
 				PackChild packChild = new PackChild();
-				packChild.setTarget(target);
-				packChild.setParentName(groupKey.split(GROUP_DELIMITER)[0]);
-				packChild.setParentSequence(groupKey.split(GROUP_DELIMITER)[1]);
 				packChild.setSequence(childKey.split(MEMBER_DELIMITER)[1]);
 				
 				String firstOldName = childKey.split(MEMBER_DELIMITER)[0];
 				packChild.setOldNames(redundantSequenceMap.get(firstOldName));
 			
-				output.get(target).add(packChild);
+				packParent.getChildren().add(packChild);
 			}
+
+			output.get(target).add(packParent);		
 		}
 		return output;	
 	}
