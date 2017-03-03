@@ -11,6 +11,11 @@ public class Nester {
 
 	public static Element namesToNestedElements(Document doc, Element parent, List<String> list, String tag, String delimiter) {
 	
+
+		Element telement = doc.createElement("TEST");
+		telement.appendChild(doc.createTextNode("HELLO, HOW ARE YOU"));
+		parent.appendChild(telement);
+	
 		// Load all names into nested Child objects
 		Nester.Child root = new Nester.Child(-1, "root", new ArrayList<Nester.Child>());
 		for (String name : list) {
@@ -20,12 +25,12 @@ public class Nester {
 		}
 
 		// Add child elements
-		growChildElements(doc, parent, root, tag);
+		growChildElements(doc, parent, root);
 
 		return parent;
 	}
 
-	private static void growChildElements(Document doc, Element parent, Nester.Child root, String tag) {	
+	private static void growChildElements(Document doc, Element parent, Nester.Child root) {	
 		
 		if (root.getChildren().isEmpty()) {
 			return;
@@ -38,7 +43,7 @@ public class Nester {
 			element.appendChild(doc.createTextNode(child.getName()));
 			parent.appendChild(element);
 			// Recursive call
-			growChildElements(doc, element, child, tag);
+			growChildElements(doc, element, child);
 		}
 	}
 	

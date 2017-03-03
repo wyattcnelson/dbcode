@@ -99,7 +99,6 @@ public class WriteXml {
 				for(PackChild pChild : pParent.getChildren()) {
 					Element childElement = doc.createElement(CHILD_TAG);
 					childElement.setAttribute("id", pChild.getMismatchString(pChild.getSequence(), pParent.getSequence()));
-					childElement.setAttribute("num-old-names", pChild.getOldNames().size() + "");
 
 					// Add nested elements for fields 1 to n 
 					// e.g.,  <field1><field2>...<fieldn></fieldn></field2></field1>
