@@ -103,7 +103,7 @@ public class WriteXml {
 
 					// Add nested elements for fields 1 to n 
 					// e.g.,  <field1><field2>...<fieldn></fieldn></field2></field1>
-					Nester.namesToNestedElements(doc, childElement, pChild.getOldNames(), FIELD_TAG, NAME_DELIMITER);
+					childElement = Nester.namesToNestedElements(doc, childElement, pChild.getOldNames(), FIELD_TAG, NAME_DELIMITER);
 					parentElement.appendChild(childElement);
 				}
 			}

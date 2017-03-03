@@ -10,7 +10,12 @@ import org.w3c.dom.Node;
 public class Nester {
 
 	public static Element namesToNestedElements(Document doc, Element parent, List<String> list, String tag, String delimiter) {
-		
+	
+
+		Element telement = doc.createElement("TEST");
+		telement.appendChild(doc.createTextNode("HELLO, HOW ARE YOU"));
+		parent.appendChild(telement);
+	
 		// Load all names into nested Child objects
 		Nester.Child root = new Nester.Child(-1, "root", new ArrayList<Nester.Child>());
 		for (String name : list) {
@@ -18,7 +23,8 @@ public class Nester {
 			int level = 0;
 			insertChildren(root, fields, level);
 		}
-		
+	
+		// TODO make it recursive to add all subnodes	
 		// Add nested child elements to parent element
 		for (Nester.Child child : root.getChildren()) {
 			Element element = doc.createElement(tag);
@@ -42,6 +48,7 @@ public class Nester {
 			// If the child with this name is not found, create it
 			Nester.Child newChild = new Nester.Child(level, name, new ArrayList<Nester.Child>());
 			insertChildren(newChild, fields, level + 1);
+			parent.getChildren().add(newChild);
 		}
 	}
 
