@@ -37,23 +37,31 @@ public class WriteXml {
 
 	public static final String NAME_DELIMITER = ":";
 	
-	public static void writeXmlRuleset(Map<String, List<PackParent>> map, File file) {
-	
+	public static void writeXmlRuleset(Map<String, List<PackParent>> map, File file, String rulesetId, boolean create) {
+		
 		// Create a new doc
 		Document doc = createDocument();
+		Element rulesetElement;
 
-		// Add root element <project> to xml and timestamp it
-		String projectId = "Project-ID";
-		Element projectElement = doc.createElement(PROJECT_TAG);
-		projectElement.setAttribute("id", projectId);
-		projectElement.setAttribute("timestamp", getTimeStamp());
-		doc.appendChild(projectElement);
+		if (create) {		
+
+			// Add root element <project> to xml and timestamp it
+			String projectId = "Project-ID";
+			Element projectElement = doc.createElement(PROJECT_TAG);
+			projectElement.setAttribute("id", projectId);
+			projectElement.setAttribute("timestamp", getTimeStamp());
+			doc.appendChild(projectElement);
 		
-		// Append the ruleset
-		String rulesetId = "IMGT-325";
-		Element rulesetElement = doc.createElement(RULESET_TAG);
-		rulesetElement.setAttribute("id", rulesetId);
-		projectElement.appendChild(rulesetElement);
+			// Append the ruleset
+			rulesetElement = doc.createElement(RULESET_TAG);
+			rulesetElement.setAttribute("id", rulesetId);
+			projectElement.appendChild(rulesetElement);
+
+		}	else {
+			
+			rulesetElement = doc.getElementById(rulesetId);		
+
+		}
 
 		// Add map to ruleset element;
 		appendMap(doc, rulesetElement, map);		

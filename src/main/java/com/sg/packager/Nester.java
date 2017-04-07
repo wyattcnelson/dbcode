@@ -35,7 +35,7 @@ public class Nester {
 		for (Nester.Child child : root.getChildren()) {
 			Element element = doc.createElement(tag);
 			element.setAttribute("id","" +  child.getLevel());
-			element.appendChild(doc.createTextNode(child.getName()));
+			element.setAttribute("name", "" + child.getName());
 			parent.appendChild(element);
 			// Recursive call
 			growChildElements(doc, element, child, tag);

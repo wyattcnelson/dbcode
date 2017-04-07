@@ -5,6 +5,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.nio.file.DirectoryStream;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -22,22 +27,32 @@ public class FileMapper {
 	public static final String GROUP_DELIMITER = "@";
 	public static final String MEMBER_DELIMITER = "x";
 
-	public static void main(String[] args) {
-		
-		Map<String, List<String>> redundantSequenceMap = mapRedundantSequences(args[0]);
-		Map<String, List<String>> groupMap = mapGroups(redundantSequenceMap, 3);	
-		
-		String target = args[0].replaceAll(".fa", "");
+	public static void main(String[] args) throws IOException {
 
-		String[] branches = {"C","B","A"};		
-
-		for(String branch : branches) {
-			groupMap = Brancher.branchGroups(groupMap, branch);
-		}	
-
-		Map<String, List<PackParent>> rulesetMap = pack(target, groupMap,redundantSequenceMap);
+		Path rulesetPath = Paths.get(args[0]);	
+		int count = 0;
+		// Iterate ruleset .fasta files
+		try ( 
+			DirectoryStream<Path> stream = Files.newDirectoryStream(rulesetPath, "*.fa");
+		) {
+			for (Path p : stream) {	
+				Map<String, List<String>> redundantSequenceMap = mapRedundantSequences(p.toString());
+				Map<String, List<String>> groupMap = mapGroups(redundantSequenceMap, 3);	
 		
-		WriteXml.writeXmlRuleset(rulesetMap, new File("test-1.xml"));
+				String target = args[0].replaceAll(".fa", "");
+
+				String[] branches = {"C","B","A"};		
+
+				for(String branch : branches) {
+					groupMap = Brancher.branchGroups(groupMap, branch);
+				}	
+
+				Map<String, List<PackParent>> rulesetMap = pack(target, groupMap,redundantSequenceMap);
+				
+				boolean create = count==0 ? true : false;
+				WriteXml.writeXmlRuleset(rulesetMap, new File("test-1.xml"), "3.27", create);
+			}
+		}
 	}
 
 	/**
@@ -96,14 +111,17 @@ public class FileMapper {
 	 * @param filePath	String path of sequence.fa
 	 *
 	 */
-	private static Map<String, List<String>> mapRedundantSequences(String filePath){
+	private static Map<String, List<String>> mapRedundantSequences(String filename) throws IOException {
 	
 		// FileReader instance created from character files using default encoding
 		
 		// BufferedReader has methods to read test from a character-input stream
 		// Single argument implies default buffer size
 
-		try(BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))){
+		try(
+			FileReader fileReader = new FileReader(filename);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+		) {
 
 			// Initialize a map to output
 			Map<String, List<String>> output = new HashMap<String, List<String>>();
@@ -151,8 +169,7 @@ public class FileMapper {
 			e.printStackTrace();
 			return null;
 		}	
-		//finally not necessary Java 7+
-		
+		//finally not necessary in try-with-resources		
 	}
 
 	/**
@@ -247,16 +264,3 @@ public class FileMapper {
 		return true;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
