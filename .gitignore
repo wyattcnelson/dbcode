@@ -1,0 +1,5 @@
+# No xml files
+*.xml
+
+# No rs
+rs/
