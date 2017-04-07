@@ -40,10 +40,15 @@ public class WriteXml {
 	public static void writeXmlRuleset(Map<String, List<PackParent>> map, File file, String rulesetId, boolean create) {
 		
 		// Create a new doc
-		Document doc = createDocument();
+		Document doc;
 		Element rulesetElement;
 
 		if (create) {		
+			
+			System.out.println("CREATE+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+			// Create a new document
+			doc = createDocument();
 
 			// Add root element <project> to xml and timestamp it
 			String projectId = "Project-ID";
@@ -59,7 +64,13 @@ public class WriteXml {
 
 		}	else {
 			
-			rulesetElement = doc.getElementById(rulesetId);		
+			System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++APPEND");
+
+			doc = getDocument(file);
+			System.out.println("file: " + file.getName());
+			System.out.println("doc: " + doc);
+			System.out.println("rulesetId: " + rulesetId);
+			rulesetElement = (Element) doc.getElementsByTagName(RULESET_TAG).item(0);		
 
 		}
 
@@ -125,6 +136,17 @@ public class WriteXml {
 		}
 		catch (Exception e) {
 			throw new RuntimeException("Failed to create document");
+		}
+	}
+
+	private static Document getDocument(File file) {
+		try {
+			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+			return docBuilder.parse(file);
+		}
+		catch (Exception e) {
+			throw new RuntimeException("Failed to get document");
 		}
 	}
 

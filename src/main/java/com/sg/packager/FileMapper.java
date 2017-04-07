@@ -36,10 +36,13 @@ public class FileMapper {
 			DirectoryStream<Path> stream = Files.newDirectoryStream(rulesetPath, "*.fa");
 		) {
 			for (Path p : stream) {	
+
+				String filename = p.getFileName().toString();
+
 				Map<String, List<String>> redundantSequenceMap = mapRedundantSequences(p.toString());
 				Map<String, List<String>> groupMap = mapGroups(redundantSequenceMap, 3);	
 		
-				String target = args[0].replaceAll(".fa", "");
+				String target = filename.replaceAll(".fa", "");
 
 				String[] branches = {"C","B","A"};		
 
@@ -50,9 +53,11 @@ public class FileMapper {
 				Map<String, List<PackParent>> rulesetMap = pack(target, groupMap,redundantSequenceMap);
 				
 				boolean create = count==0 ? true : false;
+				count++;
 				WriteXml.writeXmlRuleset(rulesetMap, new File("test-1.xml"), "3.27", create);
 			}
 		}
+		System.out.printf("Processed %d targets\n", count);
 	}
 
 	/**
